@@ -4,7 +4,7 @@
 \alias{toSequoiaInput}
 \title{Build Sequioa Input files for Tom's template script}
 \usage{
-toSequoiaInput(baselinePops, mixturePops, markerList)
+toSequoiaInput(baselinePops, mixturePops, markerList, prefix = "")
 }
 \arguments{
 \item{baselinePops}{Poplist of potential parents}
@@ -12,6 +12,9 @@ toSequoiaInput(baselinePops, mixturePops, markerList)
 \item{mixturePops}{Poplist of offspring}
 
 \item{markerList}{list of markers to use}
+
+\item{prefix}{This is a string that will be used as the prefix for the two output files.
+Default is to have no prefix.}
 }
 \value{
 Writes files to the working directory that can be uploaded to the server and

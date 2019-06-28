@@ -4,12 +4,15 @@
 \alias{toSequoiaSimulation}
 \title{Build Sequioa Input files for \code{sequoiaSim}}
 \usage{
-toSequoiaSimulation(baselinePops, markerList)
+toSequoiaSimulation(baselinePops, markerList, prefix = "")
 }
 \arguments{
 \item{baselinePops}{Poplist of potential parents}
 
 \item{markerList}{list of markers to use}
+
+\item{prefix}{This is a string that will be used as the prefix for the output files.
+Default is to have no prefix.}
 }
 \value{
 Writes a file to the working directory that can be uploaded to the server and
