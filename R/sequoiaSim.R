@@ -350,6 +350,8 @@ sequoiaSim <- function(input_parameters, LLR_min = 0.5, parent_data_file, min_ge
 		if (length(warnings()) > 0){
 			print(warnings())
 		}
+		lh_data <- seqInput[[1]]
+		rm(seqInput)
 		#calculate summary statistics and save to output dataframe
 		#calculation as variable and then assignment to matrix separately for error checking
 		#calculate possible assignments, third term should always be zero, but left it in for error checking, or in case this script is repurposed
