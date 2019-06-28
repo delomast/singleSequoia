@@ -27,6 +27,8 @@
 #' @return This function writes its output as a csv to the working directory afeter all simulations have finished.
 #'   This function will print warnings() after each simulation, so if you have warnings in your R session from
 #'   previous commands, these will be printed.
+#' @importFrom stats rbinom rnbinom
+#' @importFrom utils read.csv read.table write.table
 #' @export
 
 sequoiaSim <- function(input_parameters, LLR_min = 0.5, parent_data_file, min_genotyped = .9, allele_error_rate = .001,
@@ -262,13 +264,13 @@ sequoiaSim <- function(input_parameters, LLR_min = 0.5, parent_data_file, min_ge
 		# while not all successfully genotyped, re-sample fails, with a "ratcheting" mechanism
 		while(sum(fail_to_geno) > 0){
 			fails <- fails[!fail_to_geno,]
-			fails2 <- sapply(fail_rates, function(x){
+			fails2 <- sapply(failure_rate_loci, function(x){
 				sample(c(TRUE,FALSE), sum(fail_to_geno), replace = TRUE, prob = c(x, 1-x))
 			})
 			if(!is.matrix(fails2)){fails2 <- t(as.matrix(fails2))}
 			fails <- rbind(fails,fails2)
 			fail_to_geno <- apply(fails, 1, sum)/m_num
-			fail_to_geno <- fail_to_geno > (1-min_geno)
+			fail_to_geno <- fail_to_geno > (1-min_genotyped)
 		}
 		for(i in 1:m_num){
 			mixture[fails[,i],(i+3)] <- "00"

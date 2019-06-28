@@ -3,3 +3,8 @@
 export(sequoiaSim)
 export(toSequoiaInput)
 export(toSequoiaSimulation)
+importFrom(stats,rbinom)
+importFrom(stats,rnbinom)
+importFrom(utils,read.csv)
+importFrom(utils,read.table)
+importFrom(utils,write.table)
