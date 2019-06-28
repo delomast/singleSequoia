@@ -6,11 +6,13 @@
 #' @param baselinePops Poplist of potential parents
 #' @param mixturePops Poplist of offspring
 #' @param markerList list of markers to use
+#' @param prefix This is a string that will be used as the prefix for the two output files.
+#'   Default is to have no prefix.
 #' @return Writes files to the working directory that can be uploaded to the server and
 #'   used to run single parentage with Sequoia using Tom's template script
 #' @export
 
-toSequoiaInput <- function(baselinePops, mixturePops, markerList){
+toSequoiaInput <- function(baselinePops, mixturePops, markerList, prefix = ""){
 	scores_all <- matrix(nrow=0, ncol=length(markerList))
 	colnames(scores_all) <- markerList
 	#get parents
@@ -31,7 +33,7 @@ toSequoiaInput <- function(baselinePops, mixturePops, markerList){
 						  BY = c(rep(1, length(parent_IDs)), rep(2, length(offspring_IDs))),
 						  	  stringsAsFactors = FALSE)
 	#output metadata file
-	write.table(life_history, file="life_history.txt", sep= "\t", row.names=FALSE, quote=FALSE)
+	write.table(life_history, file=paste0(prefix, "life_history.txt"), sep= "\t", row.names=FALSE, quote=FALSE)
 	#build genotype file
 	###define empty matrix with row names and column names
 	genotypes <- matrix(nrow=length(life_history$ID), ncol=length(markerList), dimnames=list(rows = unlist(life_history$ID), cols = markerList))
@@ -65,5 +67,5 @@ toSequoiaInput <- function(baselinePops, mixturePops, markerList){
 	genotypes <- genotypes[,!(colnames(genotypes) %in% to_remove)]
 	}
 	#output genotype file
-	write.table(genotypes, file="genotypes.txt", sep="\t", row.names=TRUE, col.names=FALSE, quote=FALSE)
+	write.table(genotypes, file=paste(prefix, "genotypes.txt"), sep="\t", row.names=TRUE, col.names=FALSE, quote=FALSE)
 }

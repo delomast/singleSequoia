@@ -4,11 +4,13 @@
 #'
 #' @param baselinePops Poplist of potential parents
 #' @param markerList list of markers to use
+#' @param prefix This is a string that will be used as the prefix for the output files.
+#'   Default is to have no prefix.
 #' @return Writes a file to the working directory that can be uploaded to the server and
 #'   used to run \code{sequoiaSim}
 #' @export
 
-toSequoiaSimulation <- function(baselinePops, markerList){
+toSequoiaSimulation <- function(baselinePops, markerList, prefix = ""){
 	print("Note: this function assumes you have already removed all duplicate and failed individuals from your baseline populations.")
 	parents <- matrix(nrow=0, ncol=(3 + length(markerList)))	#initiate emtpy matrix to fill with output
 	colnames(parents) <- c("Population", "Name", "Sex", markerList)
@@ -46,6 +48,6 @@ toSequoiaSimulation <- function(baselinePops, markerList){
 		parents <- rbind(parents, parents_temp)
 	}
 	#output file to upload to server
-	write.table(parents, "parent_data.txt", sep=",", quote = FALSE, row.names = FALSE, col.names = TRUE)
+	write.table(parents, paste0(prefix, "parent_data.txt"), sep=",", quote = FALSE, row.names = FALSE, col.names = TRUE)
 	print("A file with parent data and genotypes for use with the simulation script has been written to parent_data.txt")
 }
