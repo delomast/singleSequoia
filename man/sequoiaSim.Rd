@@ -6,7 +6,7 @@
 \usage{
 sequoiaSim(input_parameters, LLR_min = 0.5, parent_data_file,
   min_genotyped = 0.9, allele_error_rate = 0.001,
-  Seq_MaxMismatch = NA)
+  Seq_MaxMismatch = NA, prefix = "")
 }
 \arguments{
 \item{input_parameters}{This is a dataframe of input parameters to control the simulations. For example:
@@ -31,9 +31,13 @@ include a simulated parent or offspring in the analysis}
 
 \item{Seq_MaxMismatch}{This is the MaxMismatch parameter to use for Sequoia. If not specified, the default is
 to use 5\% of the number of markers in your panel (rounded up to the nearest integer).}
+
+\item{prefix}{This is the prefix to add to the output file name. Default is no prefix.}
 }
 \value{
 This function writes its output as a csv to the working directory afeter all simulations have finished.
+  This function will print warnings() after each simulation, so if you have warnings in your R session from
+  previous commands, these will be printed.
 }
 \description{
 \code{sequoiaSim} runs simulations to estimate the error
