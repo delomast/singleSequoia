@@ -49,5 +49,5 @@ toSequoiaSimulation <- function(baselinePops, markerList, prefix = ""){
 	}
 	#output file to upload to server
 	write.table(parents, paste0(prefix, "parent_data.txt"), sep=",", quote = FALSE, row.names = FALSE, col.names = TRUE)
-	print("A file with parent data and genotypes for use with the simulation script has been written to parent_data.txt")
+	cat("\nA file with parent data and genotypes for use with the simulation script has been written to", paste0(prefix,"parent_data.txt"), "\n")
 }
