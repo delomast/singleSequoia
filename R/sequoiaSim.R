@@ -23,11 +23,14 @@
 #' @param allele_error_rate This is the per allele genotyping error rate
 #' @param Seq_MaxMismatch This is the MaxMismatch parameter to use for Sequoia. If not specified, the default is
 #'   to use 5\% of the number of markers in your panel (rounded up to the nearest integer).
+#' @param prefix This is the prefix to add to the output file name. Default is no prefix.
 #' @return This function writes its output as a csv to the working directory afeter all simulations have finished.
+#'   This function will print warnings() after each simulation, so if you have warnings in your R session from
+#'   previous commands, these will be printed.
 #' @export
 
 sequoiaSim <- function(input_parameters, LLR_min = 0.5, parent_data_file, min_genotyped = .9, allele_error_rate = .001,
-				   Seq_MaxMismatch = NA){
+				   Seq_MaxMismatch = NA, prefix = ""){
 
 	#load parent data file
 	if (is.character(parent_data_file)) {
@@ -346,7 +349,7 @@ sequoiaSim <- function(input_parameters, LLR_min = 0.5, parent_data_file, min_ge
 		} else {
 			maxMis <- Seq_MaxMismatch
 		}
-		results <- sequoia(GenoM=seqInput[[2]], LifeHistData=seqInput[[1]], MaxSibIter=0, MaxMismatch = maxMis, FindMaybeRel = FALSE)
+		results <- sequoia::sequoia(GenoM=seqInput[[2]], LifeHistData=seqInput[[1]], MaxSibIter=0, MaxMismatch = maxMis, FindMaybeRel = FALSE)
 		if (length(warnings()) > 0){
 			print(warnings())
 		}
@@ -389,6 +392,6 @@ sequoiaSim <- function(input_parameters, LLR_min = 0.5, parent_data_file, min_ge
 		output[sim_num,11] <- unassignable_unassigned	# Fish that could NOT be assigned correctly (parent NOT in baseline), and were NOT assigned correctly
 	}
 	#output combined output file
-	write.table(output, "Sequoia_simulation_summary.txt", sep = ",", row.names = FALSE, col.names = TRUE, quote = FALSE)
+	write.table(output, paste0(prefix, "Sequoia_simulation_summary.txt"), sep = ",", row.names = FALSE, col.names = TRUE, quote = FALSE)
 	return("Simulations complete")
 }
