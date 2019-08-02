@@ -47,6 +47,22 @@ toSequoiaSimulation <- function(baselinePops, markerList, prefix = ""){
 		colnames(parents_temp) <- c("Population", "Name", "Sex", markerList)
 		parents <- rbind(parents, parents_temp)
 	}
+	#check names for NAs
+	if(sum(is.na(parents[,2]), parents[,2] == "") > 0){
+		stop("Error: one or more individuals in your baseline does not have a name. This may be caused by an error in IDFGEN when a Population only contains one individual.")
+	}
+	#check names for uniqueness
+	tempTable <- table(parents[,2])
+	if(sum(tempTable > 1) > 0){ # if not unique
+		warning("The names of individuals are not unique across populations. Concatenating Population and individual names to form names for Sequoia.")
+		#concatenate pop and individual names
+		parents[,2] <- paste0(parents[,1], "_", parents[,2])
+		#double check for uniqueness
+		tempTable <- table(parents[,2])
+		if(sum(tempTable > 1) > 0){
+			stop("Error: After concatenation of Population name, names are still not unique.")
+		}
+	}
 	#output file to upload to server
 	write.table(parents, paste0(prefix, "parent_data.txt"), sep=",", quote = FALSE, row.names = FALSE, col.names = TRUE)
 	cat("\nA file with parent data and genotypes for use with the simulation script has been written to", paste0(prefix,"parent_data.txt"), "\n")

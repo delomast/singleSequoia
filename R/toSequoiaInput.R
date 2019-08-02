@@ -18,20 +18,55 @@ toSequoiaInput <- function(baselinePops, mixturePops, markerList, prefix = ""){
 	#get parents
 	parent_IDs <- c()
 	for (pops in baselinePops){
-		parent_IDs <- c(parent_IDs, inds(get(paste0(pops))))
-		scores_all <- rbind(scores_all, scores(get(paste0(pops)))[,markerList])
+		indivNames <- inds(get(paste0(pops)))
+		parent_IDs <- c(parent_IDs, indivNames)
+		scores_all <- rbind(scores_all, scores(get(paste0(pops)))[indivNames,markerList])
 	}
+	#check parent names for NAs
+	if(sum(is.na(parent_IDs), parent_IDs == "") > 0){
+		stop("Error: one or more individuals in your baseline does not have a name. This may be caused by an error in IDFGEN when a Population only contains one individual.")
+	}
+
 	#get offspring
 	offspring_IDs <- c()
 	for (pops in mixturePops){
-		offspring_IDs <- c(offspring_IDs, inds(get(paste0(pops))))
-		scores_all <- rbind(scores_all, scores(get(paste0(pops)))[,markerList])
+		indivNames <- inds(get(paste0(pops)))
+		offspring_IDs <- c(offspring_IDs, indivNames)
+		scores_all <- rbind(scores_all, scores(get(paste0(pops)))[indivNames,markerList])
 	}
+	#check offspring names for NAs
+	if(sum(is.na(offspring_IDs), offspring_IDs == "") > 0){
+		stop("Error: one or more individuals in your mixture does not have a name. This may be caused by an error in IDFGEN when a Population only contains one individual.")
+	}
+
 	#assign lifehistory fields
 	life_history <- data.frame(ID = c(parent_IDs, offspring_IDs),
 						  Sex = rep(1, length(c(parent_IDs, offspring_IDs))),
 						  BY = c(rep(1, length(parent_IDs)), rep(2, length(offspring_IDs))),
 						  	  stringsAsFactors = FALSE)
+
+	#check names for uniqueness
+	tempTable <- table(life_history$ID)
+	if(sum(tempTable > 1) > 0){ # if not unique
+		warning("The names of individuals are not unique across Populations. Concatenating Population and individual names to form names for Sequoia.")
+		# remake names
+		parent_IDs <- c()
+		for (pops in baselinePops){
+			parent_IDs <- c(parent_IDs, paste0(pops, "_", inds(get(paste0(pops)))))
+		}
+		offspring_IDs <- c()
+		for (pops in mixturePops){
+			offspring_IDs <- c(offspring_IDs, paste0(pops, "_", inds(get(paste0(pops)))))
+		}
+		life_history$ID <- c(parent_IDs, offspring_IDs)
+		#check that all are now unique
+		tempTable <- table(life_history$ID)
+		if(sum(tempTable > 1) > 0){
+			stop("Error: After concatenation of Population name, names are still not unique.")
+		}
+		rownames(scores_all) <- life_history$ID #so that rownames are output correectly in genotypes.txt
+	}
+
 	#output metadata file
 	write.table(life_history, file=paste0(prefix, "life_history.txt"), sep= "\t", row.names=FALSE, quote=FALSE)
 	#build genotype file
@@ -56,7 +91,7 @@ toSequoiaInput <- function(baselinePops, mixturePops, markerList, prefix = ""){
 			to_remove <- c(to_remove, marker)
 		}
 		else{		#if two alleles present
-			genos <- scores_all[rownames(genotypes),marker]
+			genos <- scores_all[,marker]
 			genotypes[genos == paste0(Alleles[1], Alleles[1]),i] <- 2
 			genotypes[genos == paste0(Alleles[1], Alleles[2]),i] <- 1
 			genotypes[genos == paste0(Alleles[2], Alleles[1]),i] <- 1
@@ -67,5 +102,5 @@ toSequoiaInput <- function(baselinePops, mixturePops, markerList, prefix = ""){
 	genotypes <- genotypes[,!(colnames(genotypes) %in% to_remove)]
 	}
 	#output genotype file
-	write.table(genotypes, file=paste(prefix, "genotypes.txt"), sep="\t", row.names=TRUE, col.names=FALSE, quote=FALSE)
+	write.table(genotypes, file=paste0(prefix, "genotypes.txt"), sep="\t", row.names=TRUE, col.names=FALSE, quote=FALSE)
 }
