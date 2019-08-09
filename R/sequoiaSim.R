@@ -45,6 +45,13 @@ sequoiaSim <- function(input_parameters, LLR_min = 0.5, parent_data_file, min_ge
 	if(nrow(parent_data) < 1){
 		stop("Error: empty parent data file")
 	}
+
+	#check for unique names, rename if not - original name sare kept if possible to make troubleshooting a little easier
+	tempTable <- table(parent_data[,2]) #count names
+	if(sum(tempTable > 1) > 0){ #if a name is repeated
+		parent_data[,2] <- paste0("UniqueID_", 1:nrow(parent_data)) #replace all with unique IDs
+	}
+
 	for (i in 1:nrow(input_parameters)){
 		if(input_parameters[i,1] < 0 || input_parameters[i,1] > 1){
 			stop("Error: invalid Proportion_baseline_sampled value on row", i)
