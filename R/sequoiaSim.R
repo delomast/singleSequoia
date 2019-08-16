@@ -359,9 +359,6 @@ sequoiaSim <- function(input_parameters, LLR_min = 0.5, parent_data_file, min_ge
 			maxMis <- Seq_MaxMismatch
 		}
 		results <- sequoia::sequoia(GenoM=seqInput[[2]], LifeHistData=seqInput[[1]], MaxSibIter=0, MaxMismatch = maxMis, FindMaybeRel = FALSE)
-		if (length(warnings()) > 0){
-			print(warnings())
-		}
 		lh_data <- seqInput[[1]]
 		rm(seqInput)
 		#calculate summary statistics and save to output dataframe
