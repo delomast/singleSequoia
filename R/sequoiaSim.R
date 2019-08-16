@@ -1,4 +1,4 @@
-#' Estimate error expected with your baseline
+#' Estimate error expected with your baseline using Sequoia for single parent assignment
 #'
 #' \code{sequoiaSim} runs simulations to estimate the error
 #' expected when using sequoia for single parent assignments with your baseline
@@ -25,8 +25,6 @@
 #'   to use 5\% of the number of markers in your panel (rounded up to the nearest integer).
 #' @param prefix This is the prefix to add to the output file name. Default is no prefix.
 #' @return This function writes its output as a csv to the working directory afeter all simulations have finished.
-#'   This function will print warnings() after each simulation, so if you have warnings in your R session from
-#'   previous commands, these will be printed.
 #' @importFrom stats rbinom rnbinom
 #' @importFrom utils read.csv read.table write.table
 #' @export
