@@ -44,6 +44,19 @@ sequoiaSim <- function(input_parameters, LLR_min = 0.5, parent_data_file, min_ge
 		stop("Error: empty parent data file")
 	}
 
+	#check that all pops have both sexes present
+	for(pop in unique(parent_data[,1])){
+		tempData <- parent_data[parent_data[,1] == pop,3]
+		if(sum(tempData == "M") < 1){
+			errMess <- paste("No males in ", pop)
+			stop(errMess)
+		}
+		if(sum(tempData == "F") < 1){
+			errMess <- paste("No females in ", pop)
+			stop(errMess)
+		}
+	}
+
 	#check for unique names, rename if not - original name sare kept if possible to make troubleshooting a little easier
 	tempTable <- table(parent_data[,2]) #count names
 	if(sum(tempTable > 1) > 0){ #if a name is repeated
