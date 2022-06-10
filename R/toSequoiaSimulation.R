@@ -92,7 +92,7 @@ toSequoiaSimulation_EFGLmh <- function(x, baselinePops, markerList = NULL, prefi
 		#build list of sex for each individual
 		sex_marker <- 0
 		for (i in 3:ncol(all_genos)){
-			if (sum(all_genos[,i] == "X") >= 1){
+			if (sum(all_genos[[i]] == "X") >= 1){
 				sex_marker <- i
 				break
 			}
@@ -122,9 +122,6 @@ toSequoiaSimulation_EFGLmh <- function(x, baselinePops, markerList = NULL, prefi
 			a1 <- all_genos[[paste0(m, ".A2")]]
 			parents_temp <- cbind(parents_temp, data.frame(m = paste0(a1, a2)))
 		}
-
-		parents_temp <- cbind(pop, all_genos$Ind, sex, all_genos[,markerList])
-		colnames(parents_temp) <- c("Population", "Name", "Sex", markerList)
 		parents <- rbind(parents, parents_temp)
 	}
 	#check names for NAs
