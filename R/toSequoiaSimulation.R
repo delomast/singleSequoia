@@ -122,7 +122,13 @@ toSequoiaSimulation_EFGLmh <- function(x, baselinePops, markerList = NULL, prefi
 			a2 <- all_genos[[paste0(m, ".A2")]]
 			a1[is.na(a1)] <- "0"
 			a2[is.na(a2)] <- "0"
-			parents_temp <- cbind(parents_temp, data.frame(m = paste0(a1, a2)))
+			if(any(nchar(a1) != 1) || any(nchar(a2) != 1)){
+				print(paste0("skipping locus ", m, " as its alleles are more than one character in length"))
+				next
+			}
+			temp <- data.frame(placeholder = paste0(a1, a2))
+			colnames(temp) <- m
+			parents_temp <- cbind(parents_temp, temp)
 		}
 		parents <- rbind(parents, parents_temp)
 	}
