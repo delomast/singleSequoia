@@ -92,7 +92,7 @@ toSequoiaSimulation_EFGLmh <- function(x, baselinePops, markerList = NULL, prefi
 		#build list of sex for each individual
 		sex_marker <- 0
 		for (i in 3:ncol(all_genos)){
-			if (sum(all_genos[[i]] == "X") >= 1){
+			if (sum(all_genos[[i]] == "X", na.rm = TRUE) >= 1){
 				sex_marker <- i
 				break
 			}
@@ -105,12 +105,12 @@ toSequoiaSimulation_EFGLmh <- function(x, baselinePops, markerList = NULL, prefi
 		}
 		sex <- rep("U", nrow(all_genos))
 		if (sex_marker != 0){
-			sex[all_genos[[sex_marker]] == "X" & all_genos[[sex_marker + 1]] == "X"] <- "F"
-			sex[all_genos[[sex_marker]] == "Y" | all_genos[[sex_marker + 1]] == "Y"] <- "M"
+			sex[!is.na(all_genos[[sex_marker]]) & all_genos[[sex_marker]] == "X" & all_genos[[sex_marker + 1]] == "X"] <- "F"
+			sex[!is.na(all_genos[[sex_marker]]) & (all_genos[[sex_marker]] == "Y" | all_genos[[sex_marker + 1]] == "Y")] <- "M"
 		}
 		if (pheno_found){
-			sex[sex == "U" & pheno_sex == "F"] <- "F"
-			sex[sex == "U" & pheno_sex == "M"] <- "M"
+			sex[sex == "U" & !is.na(pheno_sex) & pheno_sex == "F"] <- "F"
+			sex[sex == "U" & !is.na(pheno_sex) & pheno_sex == "M"] <- "M"
 		}
 		if(sum(sex == "U") > 0){
 			sex[sex == "U"] <- sample(c("M", "F"), sum(sex == "U"), replace = TRUE)
@@ -119,7 +119,9 @@ toSequoiaSimulation_EFGLmh <- function(x, baselinePops, markerList = NULL, prefi
 		parents_temp <- data.frame(Population = pop, Name = all_genos$Ind, Sex = sex)
 		for(m in markerList){
 			a1 <- all_genos[[paste0(m, ".A1")]]
-			a1 <- all_genos[[paste0(m, ".A2")]]
+			a2 <- all_genos[[paste0(m, ".A2")]]
+			a1[is.na(a1)] <- "0"
+			a2[is.na(a2)] <- "0"
 			parents_temp <- cbind(parents_temp, data.frame(m = paste0(a1, a2)))
 		}
 		parents <- rbind(parents, parents_temp)
