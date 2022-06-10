@@ -119,6 +119,7 @@ toSequoiaInput <- function(baselinePops, mixturePops, markerList, prefix = ""){
 #' @return Writes files to the working directory that can be uploaded to the server and
 #'   used to run single parentage with Sequoia using Tom's template script
 #' @import EFGLmh
+#' @import dplyr
 #' @export
 
 toSequoiaInput_EFGLmh <- function(x, baselinePops, mixturePops, markerList = NULL, prefix = ""){

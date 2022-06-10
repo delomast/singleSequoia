@@ -9,7 +9,8 @@ Description: Tools to run single parent assignments with Sequoia and estimate
 Imports:
     utils,
     stats,
-    EFGLmh
+    EFGLmh,
+    dplyr
 Suggests:
     sequoia
 License: MIT + file LICENSE
