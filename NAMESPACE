@@ -2,7 +2,10 @@
 
 export(sequoiaSim)
 export(toSequoiaInput)
+export(toSequoiaInput_EFGLmh)
 export(toSequoiaSimulation)
+export(toSequoiaSimulation_EFGLmh)
+import(EFGLmh)
 importFrom(stats,rbinom)
 importFrom(stats,rnbinom)
 importFrom(utils,read.csv)

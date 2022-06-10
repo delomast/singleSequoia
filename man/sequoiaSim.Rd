@@ -2,11 +2,17 @@
 % Please edit documentation in R/sequoiaSim.R
 \name{sequoiaSim}
 \alias{sequoiaSim}
-\title{Estimate error expected with your baseline}
+\title{Estimate error expected with your baseline using Sequoia for single parent assignment}
 \usage{
-sequoiaSim(input_parameters, LLR_min = 0.5, parent_data_file,
-  min_genotyped = 0.9, allele_error_rate = 0.001,
-  Seq_MaxMismatch = NA, prefix = "")
+sequoiaSim(
+  input_parameters,
+  LLR_min = 0.5,
+  parent_data_file,
+  min_genotyped = 0.9,
+  allele_error_rate = 0.001,
+  Seq_MaxMismatch = NA,
+  prefix = ""
+)
 }
 \arguments{
 \item{input_parameters}{This is a dataframe of input parameters to control the simulations. For example:
@@ -36,8 +42,6 @@ to use 5\% of the number of markers in your panel (rounded up to the nearest int
 }
 \value{
 This function writes its output as a csv to the working directory afeter all simulations have finished.
-  This function will print warnings() after each simulation, so if you have warnings in your R session from
-  previous commands, these will be printed.
 }
 \description{
 \code{sequoiaSim} runs simulations to estimate the error
