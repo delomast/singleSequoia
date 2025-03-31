@@ -36,6 +36,8 @@ makeSequioaSingleParent <- function(baseline, mixture){
 		geno_data[geno_data[,i] == "BB",i] <- 0
 	}
 	geno_data <- as.matrix(geno_data)
+	# convert to numeric matrix
+	geno_data <- apply(geno_data, 2, as.numeric)
 	rownames(geno_data) <- lh_data[,1]
 	return(list(lh_data, geno_data))
 }
